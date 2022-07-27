@@ -5,4 +5,4 @@ function daysUntil2023(date) {
   );
 }
 
-console.log(daysUntil2023("2/28/2022"));
+console.log(daysUntil2023("12/28/2022"));
