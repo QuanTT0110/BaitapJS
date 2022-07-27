@@ -5,13 +5,9 @@ function count(num){
         num=num*(-1);
     }
     let count =0;
-    while(num){
+    while(num>1){
         num = num/10;
         count++;
-        if(num<10){
-            count++;
-            break;
-        }
     }
     return count;
 }
