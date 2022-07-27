@@ -23,9 +23,7 @@ function squareDigits(num) {
   let rs = "";
   while (num >= 1) {
     let square = Math.pow(num % 10, 2);
-
     rs = String(square) + rs;
-
     num = Math.floor(num / 10);
   }
   return parseInt(rs);
