@@ -45,4 +45,4 @@ function capToFront2(str) {
 }
 //A - Z= 65 - 90
 //a - z= 97 - 122
-console.log(capToFront2("moveMENT"));
+console.log(capToFront("TruNgGGPRo"));

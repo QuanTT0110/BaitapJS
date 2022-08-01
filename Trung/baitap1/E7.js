@@ -30,7 +30,7 @@ function mirror(arr) {
 function mirror2(arr) {
   let oldArr = [...arr];
   arr.reverse();
-  larr.shift();
+  arr.shift();
   return oldArr.concat(arr);
 }
 console.log(mirror([0, 2, 4, 6])); //

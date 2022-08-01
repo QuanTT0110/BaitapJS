@@ -1,4 +1,4 @@
-const prompt = require("prompt-sync")();
+// const prompt = require("prompt-sync")();
 function passwordGenerator(options) {
   const upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const lower = "abcdefghijklmnopqrstuvwxyz";
@@ -18,6 +18,7 @@ function passwordGenerator(options) {
   if (options.symbol) {
     types.push(4);
   }
+  types = types.length > 0 ? types : [1, 2, 3, 4];
   for (let i = 0; i < options.length; i++) {
     let type = types[Math.floor(Math.random() * types.length)];
     switch (type) {
@@ -53,18 +54,18 @@ function passwordGenerator(options) {
 }
 
 const x = {
-  length: 20,
+  length: 1000,
   lower: true,
-  upper: true,
+  upper: false,
   number: true,
-  symbol: true,
+  symbol: false,
 };
 
-x.length = parseInt(prompt("enter length Password(interger):"));
-x.lower = String(prompt("contain lower  ? (true,false):")) == "true";
-x.upper = String(prompt("contain upper  ? (true,false):")) == "true";
-x.symbol = String(prompt("contain symbol  ? (true,false):")) == "true";
-x.number = String(prompt("contain number  ? (true,false):")) == "true";
+// x.length = parseInt(prompt("enter length Password(interger):"));
+// x.lower = String(prompt("contain lower  ? (true,false):")) == "true";
+// x.upper = String(prompt("contain upper  ? (true,false):")) == "true";
+// x.symbol = String(prompt("contain symbol  ? (true,false):")) == "true";
+// x.number = String(prompt("contain number  ? (true,false):")) == "true";
 
 const rs = passwordGenerator(x);
-console.log(rs, rs.length);
+console.log(rs, rs.length)

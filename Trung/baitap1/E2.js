@@ -16,8 +16,8 @@
 
 // Notes: Remember to sort the keys.
 function keysAndValues(obj) {
-  keys = [];
-  values = [];
+  let keys = [];
+  let values = [];
   for (var key in obj) {
     keys.push(key);
     values.push(obj[key]);
@@ -38,12 +38,18 @@ function keysAndValues(obj) {
   console.log([keys, values]);
   return [keys, values];
 }
-keysAndValues({ key1: true, key2: false, key3: undefined });
+//
 function keysAndValues2(obj) {
   let keys = [];
   let values = [];
-  Object.keys(obj).forEach((key) => {
-    keys.push(key);
-    values.push(obj[key]);
-  });
+  Object.keys(obj)
+    .sort()
+    .forEach((key) => {
+      keys.push(key);
+      values.push(obj[key]);
+    });
+  console.log([keys, values]);
+
+  return [keys, values];
 }
+keysAndValues2({ b: "Microsoft", c: "Google", a: "Apple" });
