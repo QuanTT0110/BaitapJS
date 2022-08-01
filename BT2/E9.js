@@ -25,12 +25,10 @@ function dealCard() {
     let players=[];
     let numberOfPlayer = parseInt(prompt("Please enter number of player(max is 17):"))
     if (numberOfPlayer > 17) numberOfPlayer = parseInt(prompt("Maximum player is 17, please enter number of player again:"))
-    for(let i=1;i<=numberOfPlayer;i++){
-        let card = []
-        for(let j=1;j<=3;j++){
-            card.push(shuffledCard.pop());
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < numberOfPlayer; j++) {
+            players[j] ? players[j].push(shuffledCard.pop()) : players[j] = [shuffledCard.pop()]
         }
-        players.push(card);
     }
     return calculatePoint(players);
 }
@@ -53,20 +51,20 @@ function check(cards) {
 
 function calculatePoint(cards) {
     console.log(cards)
-    const rs = []
-    let point = 0;
+    const rs = [];
     for (let i=0;i<cards.length;i++) {
+        let point = 0;
         if (check(cards[i])===1) {
             rs.push(10)
         }else if (check(cards[i])===2) {
             rs.push(11)
         }else {
             for(let j=0;j<cards[i].length;j++){
-                let card = cards[i][j].split("-");
+                let card = cards[i][j].split('-');
                 if(card[0] === "J" || card[0]==="Q" || card[0]==="K"){
                     point+=10;
                 }else {
-                    point+= parseInt(card[0]);
+                    point+=parseInt(card[0]);
                 }
             }
             rs.push(point%10);
