@@ -99,7 +99,14 @@ function check(s){
 
 
 function randomElement(){
-        return cards[Math.floor(Math.random() * cards.length)];
+        let b = cards[Math.floor(Math.random() * cards.length)];
+        for(var i in cards){
+            if(cards[i]===b){
+                cards.splice(i,1);
+                break;
+            }
+        }
+        return b;
 }
 
 start();
