@@ -87,7 +87,7 @@ function check(s){
         let newS =  s[i].split("-");
         result.push(newS[0]);
     }
-    if(result[0] === result[1] === result[2]){
+    if(result[0] === result[1] && result[1] === result[2]){
         return 1;
     }else 
     if ((result[0] === "J" || result[0]==="Q" || result[0]==="K") && (result[1] === "J" || result[1]==="Q" || result[1]==="K") && (result[2] === "J" || result[2]==="Q" || result[2]==="K"))
