@@ -1,8 +1,8 @@
 import services from "../services";
 import { Request, Response } from "express";
 import * as response from "../utils/response";
-import { ICreateStaff } from "../models/createRequest";
-import { IQueryStaff } from "../models/queryRequest";
+import { ICreateStaff } from "../models/create-request";
+import { IQueryStaff } from "../models/query-request";
 import responseMsg from "../const/responseMsg";
 export const create = async (req: Request, res: Response) => {
   const staff: ICreateStaff = req.body as ICreateStaff;

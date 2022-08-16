@@ -1,7 +1,7 @@
 import db from "../configs/data-source";
-import { ICreateStaff } from "../models/createRequest";
+import { ICreateStaff } from "../models/create-request";
 import { Staff } from "../entitys";
-import { IQueryStaff } from "../models/queryRequest";
+import { IQueryStaff } from "../models/query-request";
 import { Brackets } from "typeorm";
 import responseMsg from "../const/responseMsg";
 

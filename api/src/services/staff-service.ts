@@ -1,6 +1,6 @@
 import responseMsg from "../const/responseMsg";
-import { ICreateStaff } from "../models/createRequest";
-import { IQueryStaff } from "../models/queryRequest";
+import { ICreateStaff } from "../models/create-request";
+import { IQueryStaff } from "../models/query-request";
 import dao from "../dao";
 import { Staff } from "../entitys";
 import { NullLiteral } from "typescript";
