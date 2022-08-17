@@ -3,57 +3,58 @@ import { Staff } from '../entity';
 import { ICreateStaff, IQueryStaff } from '../models';
 const staffReponsitory = AppDataSource.getRepository(Staff);
 
-export const getStaffByEmail = async (email: string): Promise<Staff | null> => {
+export const getByEmail = async (email: string): Promise<Staff | Error> => {
   const result = await staffReponsitory.findOne({
     where: {
       email: email,
     },
 
     select: {
-      id: true,
-      name: true,
       email: true,
       password: true,
     },
   });
 
+  if(!result){
+    return new Error("Not Found")
+  }
+
   return result;
 };
 
-export const getStaff = async (id: number): Promise<Staff | null> => {
+export const getById = async (id: number): Promise<Staff | Error> => {
   const result = await staffReponsitory.findOne({
     where: {
       id: id,
     },
-    
   });
+
+  if(!result){
+    return new Error("Not Found")
+  }
 
   return result;
 };
 
-export const createStaff = async (
+export const create = async (
   staff: ICreateStaff
-): Promise<Staff | null> => {
-  return await staffReponsitory.save(staffReponsitory.create(staff));
+): Promise<Staff | Error> => {
+  const newStaff = await staffReponsitory.save(staffReponsitory.create(staff))
+  if(!newStaff){
+    return new Error("Create Failed")
+  }
+  return newStaff;
 };
 
-export const saveStaff = async (
-  staff: ICreateStaff,
-  id: number
-): Promise<Staff | null> => {
-  const oldStaff = await getStaff(id);
-  if (!oldStaff) {
-    return null;
+export const update = async (staff: ICreateStaff,): Promise<Staff | Error> => {
+  const updateStaff = await staffReponsitory.save(staff);
+  if (!updateStaff) {
+    return new Error("Update Faild");
   }
-
-  const updateStaff = await staffReponsitory.save(
-    Object.assign(oldStaff, staff)
-  );
-
   return updateStaff;
 };
 
-export const getStaffs = async (query: IQueryStaff): Promise<Staff[]> => {
+export const getStaffS = async (query: IQueryStaff): Promise<Staff[]> => {
   const limit = query.limit ? Math.floor(query.limit) : 10;
   const keyword = query.keyword ? '%' + query.keyword + '%' : '%%';
   const page = query.page > 0 ? Math.floor(query.page - 1) * limit : 1;
@@ -63,3 +64,5 @@ export const getStaffs = async (query: IQueryStaff): Promise<Staff[]> => {
     .orWhere('Staff.email LIKE :email', { email: `%${keyword}%` });
   return await queryString.limit(limit).offset(page).getMany();
 };
+
+
