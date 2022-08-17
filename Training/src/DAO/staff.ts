@@ -43,6 +43,7 @@ export const create = async (
   if(!newStaff){
     return new Error("Create Failed")
   }
+  
   return newStaff;
 };
 
@@ -51,6 +52,7 @@ export const update = async (staff: ICreateStaff,): Promise<Staff | Error> => {
   if (!updateStaff) {
     return new Error("Update Faild");
   }
+  
   return updateStaff;
 };
 
