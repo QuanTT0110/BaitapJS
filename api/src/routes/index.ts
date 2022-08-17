@@ -3,7 +3,7 @@ import commonRouter from "./common-route";
 import staffRouter from "./staff-router";
 import { Request, Response, NextFunction, Express } from "express";
 
-import AppError from "../utils/appError";
+import AppError from "../utils/app-error";
 
 const routes = (app: Express) => {
   app.use("/", commonRouter);

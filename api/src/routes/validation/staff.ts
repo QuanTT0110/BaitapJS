@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { check, validationResult, buildCheckFunction } from "express-validator";
-import responseMsg from "../../const/responseMsg";
-import AppError from "../../utils/appError";
+import responseMsg from "../../const/response-msg";
+import AppError from "../../utils/app-error";
 const checkUUIDParamsAndRequest = buildCheckFunction([
   "body",
   "query",
@@ -9,11 +9,7 @@ const checkUUIDParamsAndRequest = buildCheckFunction([
 ]);
 const checkQuery = buildCheckFunction(["query"]);
 const checkBody = buildCheckFunction(["body"]);
-export const createStaff = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const createStaff = async (req: Request, res: Response, next: NextFunction) => {
   await checkBody(["name", "phone", "password", "active", "isRoot"])
     .notEmpty()
     .run(req);
@@ -32,11 +28,7 @@ export const createStaff = async (
   next();
 };
 
-export const isUUID = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const isUUID = async (req: Request, res: Response, next: NextFunction) => {
   await checkUUIDParamsAndRequest("id").isUUID().run(req);
   const rs = validationResult(req);
   if (!rs.isEmpty()) {
@@ -45,11 +37,7 @@ export const isUUID = async (
   }
   next();
 };
-export const queryStaff = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const queryStaff = async (req: Request, res: Response, next: NextFunction) => {
   await checkQuery(["limit", "page"])
     .isNumeric()
     .optional({ nullable: true })
@@ -70,3 +58,5 @@ export const queryStaff = async (
   }
   next();
 };
+
+export default { createStaff, isUUID, queryStaff };

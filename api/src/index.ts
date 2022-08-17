@@ -21,7 +21,7 @@ async function main() {
   app.use(cors());
 
   db.setAppDataSource(process.env);
-  db.getAppDataSourch()
+  db.getAppDataSource()
     .initialize()
     .then(() => {})
     .catch((error) => console.log(error));

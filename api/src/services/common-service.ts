@@ -1,12 +1,12 @@
 import dao from "../dao";
-import { ILogin } from "../models/commonRequest";
+import { ILogin } from "../models/common-request";
 import { Staff } from "../entitys";
 import * as jwt from "jsonwebtoken";
 import * as bcrypt from "bcryptjs";
 import config from "../configs/config";
-import responseMsg from "../const/responseMsg";
+import responseMsg from "../const/response-msg";
 
-export const login = async (login: ILogin) => {
+const login = async (login: ILogin): Promise<[Object | null, Error | null]> => {
   const user = await dao.staff.findByPhone(login.phone);
   if (user instanceof Error) {
     return [null, user];
@@ -28,3 +28,4 @@ export const login = async (login: ILogin) => {
   }
   return [null, new Error(responseMsg.WRONG_PASSWORD)];
 };
+export default { login };

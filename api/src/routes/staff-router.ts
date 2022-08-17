@@ -1,8 +1,8 @@
 import * as express from "express";
 import controllers from "../controllers";
 import { auth } from "../middlewares/auth";
-import { isRoot } from "./permission/requireRoot";
-import * as validate from "./validation/staff";
+import { isRoot } from "./permission/require-root";
+import validate from "./validation/staff";
 const router = express.Router();
 router.use(auth);
 /**

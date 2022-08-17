@@ -1,11 +1,13 @@
-import responseMsg from "../const/responseMsg";
+import responseMsg from "../const/response-msg";
 import { ICreateStaff } from "../models/create-request";
 import { IQueryStaff } from "../models/query-request";
 import dao from "../dao";
 import { Staff } from "../entitys";
 import { NullLiteral } from "typescript";
 
-export const create = async (staff: ICreateStaff) => {
+const create = async (
+  staff: ICreateStaff
+): Promise<[Object | null, Error | null]> => {
   if (await isPhoneExist(staff.phone, null)) {
     return [null, new Error(responseMsg.ALREADY_EXIST)];
   }
@@ -16,7 +18,10 @@ export const create = async (staff: ICreateStaff) => {
 
   return [{ ...rs, password: undefined }, null];
 };
-export const update = async (id: string, staff: ICreateStaff) => {
+const update = async (
+  id: string,
+  staff: ICreateStaff
+): Promise<[Staff | null, Error | null]> => {
   if (await isPhoneExist(staff.phone, id)) {
     return [null, new Error(responseMsg.ALREADY_EXIST)];
   }
@@ -36,7 +41,9 @@ export const update = async (id: string, staff: ICreateStaff) => {
 
   return [rs, null];
 };
-export const changeActive = async (id: string) => {
+const changeActive = async (
+  id: string
+): Promise<[Object | null, Error | null]> => {
   const staff = await dao.staff.findById(id);
   if (staff instanceof Error) {
     return [null, staff];
@@ -47,20 +54,23 @@ export const changeActive = async (id: string) => {
   }
   return [{}, null];
 };
-export const findById = async (id: string) => {
+const findById = async (id: string): Promise<[Staff | null, Error | null]> => {
   const rs = await dao.staff.findById(id);
   if (rs instanceof Error) {
     return [null, rs];
   }
   return [rs, null];
 };
-export const find = async (query: IQueryStaff) => {
+const find = async (query: IQueryStaff): Promise<[Staff[], null]> => {
   query.limit = query.limit ? Math.floor(query.limit) : 20;
   query.keyword = query.keyword ? "%" + query.keyword + "%" : "%%";
   const rs = await dao.staff.find(query);
   return [rs, null];
 };
-export const isPhoneExist = async (phone: string, id: string | null) => {
+const isPhoneExist = async (
+  phone: string,
+  id: string | null
+): Promise<boolean> => {
   const rs = await dao.staff.findByPhone(phone);
   if (rs instanceof Error) {
     return false;
@@ -74,10 +84,19 @@ export const isPhoneExist = async (phone: string, id: string | null) => {
   }
   return true;
 };
-export const isExist = async (id: string) => {
+const isExist = async (id: string): Promise<boolean> => {
   const rs = await dao.staff.findById(id);
   if (rs instanceof Error) {
     return false;
   }
   return true;
+};
+export default {
+  create,
+  update,
+  changeActive,
+  findById,
+  find,
+  isPhoneExist,
+  isExist,
 };

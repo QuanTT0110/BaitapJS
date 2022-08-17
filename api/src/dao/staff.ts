@@ -1,11 +1,11 @@
 import db from "../configs/data-source";
 import { ICreateStaff } from "../models/create-request";
-import { Staff } from "../entitys";
+import { Staff } from "../entitys/";
 import { IQueryStaff } from "../models/query-request";
 import { Brackets } from "typeorm";
-import responseMsg from "../const/responseMsg";
+import responseMsg from "../const/response-msg";
 
-export const findByPhone = async (phone: string): Promise<Staff | Error> => {
+const findByPhone = async (phone: string): Promise<Staff | Error> => {
   const rs = await db
     .getStaffRepository()
     .createQueryBuilder("Staff")
@@ -17,7 +17,7 @@ export const findByPhone = async (phone: string): Promise<Staff | Error> => {
   }
   return rs;
 };
-export const findById = async (id: string): Promise<Staff | Error> => {
+const findById = async (id: string): Promise<Staff | Error> => {
   const rs = await db
     .getStaffRepository()
     .createQueryBuilder("Staff")
@@ -28,7 +28,7 @@ export const findById = async (id: string): Promise<Staff | Error> => {
   }
   return rs;
 };
-export const create = async (staff: ICreateStaff): Promise<Staff | Error> => {
+const create = async (staff: ICreateStaff): Promise<Staff | Error> => {
   const newStaff = await db
     .getStaffRepository()
     .save(db.getStaffRepository().create(staff));
@@ -37,14 +37,14 @@ export const create = async (staff: ICreateStaff): Promise<Staff | Error> => {
   }
   return newStaff;
 };
-export const update = async (staff: Staff): Promise<Staff | Error> => {
+const update = async (staff: Staff): Promise<Staff | Error> => {
   const updateStaff = await db.getStaffRepository().save(staff);
   if (!updateStaff) {
     return new Error(responseMsg.UPDATE_ERROR);
   }
   return updateStaff;
 };
-export const changeActive = async (
+const changeActive = async (
   id: string,
   active: boolean
 ): Promise<Object | Error> => {
@@ -56,7 +56,7 @@ export const changeActive = async (
   }
   return {};
 };
-export const find = async (query: IQueryStaff): Promise<Staff[]> => {
+const find = async (query: IQueryStaff): Promise<Staff[]> => {
   const skip = query.page > 0 ? Math.floor(query.page - 1) * query.limit : 0;
   const queryString = await db.getStaffRepository().createQueryBuilder();
 
@@ -77,3 +77,4 @@ export const find = async (query: IQueryStaff): Promise<Staff[]> => {
   }
   return await queryString.limit(query.limit).offset(skip).getMany();
 };
+export default { findByPhone, findById, create, update, changeActive, find };

@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { Staff } from "../entitys";
 
 export default class DB {
@@ -21,10 +21,10 @@ export default class DB {
     });
   };
 
-  static getAppDataSourch = () => {
+  static getAppDataSource = (): DataSource => {
     return this._appDataSource;
   };
-  static getStaffRepository = () => {
+  static getStaffRepository = (): Repository<Staff> => {
     return this._appDataSource.getRepository(Staff);
   };
 }

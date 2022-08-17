@@ -1,6 +1,6 @@
 import * as express from "express";
 import controllers from "../controllers";
-import * as validate from "./validation/common";
+import validate from "./validation/common";
 const router = express.Router();
 /**
  * @openapi

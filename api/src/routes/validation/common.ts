@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { check, validationResult, buildCheckFunction } from "express-validator";
-import AppError from "../../utils/appError";
-import responseMsg from "../../const/responseMsg";
+import AppError from "../../utils/app-error";
+import responseMsg from "../../const/response-msg";
 const checkUUIDParamsAndRequest = buildCheckFunction([
   "body",
   "query",
@@ -9,11 +9,7 @@ const checkUUIDParamsAndRequest = buildCheckFunction([
 ]);
 const checkQuery = buildCheckFunction(["query"]);
 const checkBody = buildCheckFunction(["body"]);
-export const login = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   await checkBody(["phone", "password"]).notEmpty().isString().trim().run(req);
   const rs = validationResult(req);
   if (!rs.isEmpty()) {
@@ -22,3 +18,5 @@ export const login = async (
   }
   next();
 };
+
+export default { login };

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import responseMsg from "../../const/responseMsg";
-import * as response from "../../utils/response";
+import responseMsg from "../../const/response-msg";
+import response from "../../utils/response";
 
 export const isRoot = async (
   req: Request,

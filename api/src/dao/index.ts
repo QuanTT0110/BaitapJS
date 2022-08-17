@@ -1,3 +1,3 @@
-import * as staff from "./staff";
+import staff from "./staff";
 
 export default { staff };
