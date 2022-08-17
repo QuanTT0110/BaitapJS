@@ -1,3 +1,3 @@
-import {staff} from "./staff"
+import {Staff} from "./staff"
 
-export {staff}
+export {Staff}
