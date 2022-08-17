@@ -10,6 +10,5 @@ router
   .get("/:id", auth, Staff.getStaffById)
   .get("/", auth, queryStaff, Staff.getStaffs)
   .put("/:id", auth, updateStaff, Staff.updateStaff)
-  .delete("/:id", auth, Staff.deleteStaff);
 
 export default router;
