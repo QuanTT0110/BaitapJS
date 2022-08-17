@@ -8,7 +8,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
   const authorizationHeader: any = req.headers['authorization'];
   // Beaer [token]
   if (!authorizationHeader) {
-    return res.status(404).json('Please Auth');
+    res.status(404).json('Please Auth');
   }
 
   const token = authorizationHeader.split(' ')[1];
