@@ -1,71 +1,55 @@
-import {
-  getStaffByEmail,
-  getStaff,
-  getStaffs,
-  createStaff,
-  saveStaff,
-} from '../DAO';
-import { ICreateStaff, IQueryStaff } from '../models';
+import  dao  from "../DAO";
+import { ICreateStaff, IQueryStaff } from "../models";
 
-export const createStafff = async (staff: ICreateStaff) => {
-  const result: any = await createStaff(staff);
+export const createStaff = async (staff: ICreateStaff) => {
+  const result = await dao.staff.create(staff);
   return result;
 };
-
-export const updateStaff = async (staff: ICreateStaff, id: any) => {
-  const result = await saveStaff(staff, id);
-  if (!result) {
-    return null;
+export const updateStaff = async (staff: ICreateStaff) => {
+  const result = await dao.staff.update(staff);
+  if (result instanceof Error) {
+    return [null,result];
   }
 
-  return result;
+  return [result,null];
 };
-
 export const getStaffById = async (id: any) => {
-  const result = await getStaff(id);
-  if (!result) {
-    return null;
+  const result = await dao.staff.getById(id);
+
+  if (result instanceof Error) {
+    return [null,result];
   }
 
-  return result;
+  return [result,null];
 };
+export const getStaffs = async (query: IQueryStaff) => {
+  const result = <Object|null> (
+    await dao.staff.getStaffS(query)
+  )
 
-export const getStaffS = async (query: IQueryStaff) => {
-  const result = await getStaffs(query);
-  if (!result) {
-    return null;
+  if (result instanceof Error) {
+    return [null,result];
   }
-
-  return result;
+  
+  return [result,null];
 };
 
-export const deleteStaff = async (id: any) => {
-  const result = await getStaff(id);
-  if (!result) {
-    return null;
-  }
 
-  await result.remove();
-  return true;
-};
+export const loginStaffWithEmailAndPassword = async (email: string,) => {
+  const staff = await dao.staff.getByEmail(email)
 
-export const loginStaffWithEmailAndPassword = async (
-  email: string,
-  password: string
-) => {
-  const staff = await getStaffByEmail(email);
-  if (!staff || staff.password != password) {
+  if (!staff ) {
     return false;
   }
 
-  return staff;
+  return [staff,null];
 };
 
 export const checkEmail = async (email: string) => {
-  const oldStaff = await getStaffByEmail(email);
+  const oldStaff = await dao.staff.getByEmail(email);
   if (oldStaff) {
     return true;
   }
-
+  
   return false;
 };
