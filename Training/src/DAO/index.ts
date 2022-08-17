@@ -1,3 +1,3 @@
-import Staff from "./staff";
+import *  as staff from "./staff";
 
-export {Staff}
+export default {staff}
