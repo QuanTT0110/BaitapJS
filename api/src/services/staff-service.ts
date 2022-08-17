@@ -1,27 +1,26 @@
 import responseMsg from "../const/response-msg";
-import { ICreateStaff } from "../models/create-request";
-import { IQueryStaff } from "../models/query-request";
+import { IStaffCreatePayload, IStaffFindAllQuery } from "../models/staff";
 import dao from "../dao";
 import { Staff } from "../entitys";
 import { NullLiteral } from "typescript";
 
 const create = async (
-  staff: ICreateStaff
+  staff: IStaffCreatePayload
 ): Promise<[Object | null, Error | null]> => {
   if (await isPhoneExist(staff.phone, null)) {
     return [null, new Error(responseMsg.ALREADY_EXIST)];
   }
-  const rs = await dao.staff.create(staff);
-  if (rs instanceof Error) {
-    return [null, rs];
+  const [data, error] = await dao.staff.create(staff);
+  if (error) {
+    return [null, error];
   }
 
-  return [{ ...rs, password: undefined }, null];
+  return [{ ...data, password: undefined }, null];
 };
 
 const update = async (
   id: string,
-  staff: ICreateStaff
+  staff: IStaffCreatePayload
 ): Promise<[Staff | null, Error | null]> => {
   if (await isPhoneExist(staff.phone, id)) {
     return [null, new Error(responseMsg.ALREADY_EXIST)];
@@ -29,60 +28,63 @@ const update = async (
   if (!(await isExist(id))) {
     return [null, new Error(responseMsg.NOT_FOUND)];
   }
-  const oldStaff = await dao.staff.findById(id);
-  if (oldStaff instanceof Error) {
-    return [null, oldStaff];
-  }
-  const rs = await dao.staff.update(
-    Object.assign(oldStaff, { ...staff, auth: undefined })
-  );
-  if (rs instanceof Error) {
-    return [null, rs];
-  }
+  const [oldStaff, error] = await dao.staff.findById(id);
 
-  return [rs, null];
+  if (oldStaff) {
+    const [data, error2] = await dao.staff.update(
+      Object.assign(oldStaff, { ...staff, auth: undefined })
+    );
+
+    if (error2) {
+      return [null, error];
+    }
+    return [data, null];
+  } else {
+    return [null, error];
+  }
 };
 
 const changeActive = async (
   id: string
 ): Promise<[Object | null, Error | null]> => {
-  const staff = await dao.staff.findById(id);
-  if (staff instanceof Error) {
-    return [null, staff];
+  const [staff, error] = await dao.staff.findById(id);
+  if (staff) {
+    const [data, error2] = await dao.staff.changeActive(id, !staff.active);
+    if (error2) {
+      return [null, error2];
+    }
+    return [{}, null];
+  } else {
+    return [null, error];
   }
-  const rs = await dao.staff.changeActive(id, !staff.active);
-  if (rs instanceof Error) {
-    return [null, rs];
-  }
-  return [{}, null];
 };
 
 const findById = async (id: string): Promise<[Staff | null, Error | null]> => {
-  const rs = await dao.staff.findById(id);
-  if (rs instanceof Error) {
-    return [null, rs];
+  const [data, error] = await dao.staff.findById(id);
+  if (error) {
+    return [null, error];
   }
-  return [rs, null];
+  return [data, null];
 };
 
-const find = async (query: IQueryStaff): Promise<[Staff[], null]> => {
+const find = async (query: IStaffFindAllQuery): Promise<[Staff[], null]> => {
   query.limit = query.limit ? Math.floor(query.limit) : 20;
   query.keyword = query.keyword ? "%" + query.keyword + "%" : "%%";
-  const rs = await dao.staff.find(query);
-  return [rs, null];
+  const [data, error] = await dao.staff.find(query);
+  return [data, null];
 };
 
 const isPhoneExist = async (
   phone: string,
   id: string | null
 ): Promise<boolean> => {
-  const rs = await dao.staff.findByPhone(phone);
-  if (rs instanceof Error) {
+  const [data, error] = await dao.staff.findByPhone(phone);
+  if (error) {
     return false;
   }
   // trường hợp update kiểm tra xem phải số của bản thân
   if (id) {
-    if (rs.id == id) {
+    if (data && data.id == id) {
       return false;
     }
     return true;
@@ -91,8 +93,8 @@ const isPhoneExist = async (
 };
 
 const isExist = async (id: string): Promise<boolean> => {
-  const rs = await dao.staff.findById(id);
-  if (rs instanceof Error) {
+  const [data, error] = await dao.staff.findById(id);
+  if (error) {
     return false;
   }
   return true;

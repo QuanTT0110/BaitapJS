@@ -1,7 +1,13 @@
 import { Staff } from "../entitys";
 
-// create interafce
-export interface ICreateStaff {
+export interface IStaffFindAllQuery {
+  limit: number;
+  page: number;
+  keyword: string;
+  active: boolean;
+}
+
+export interface IStaffCreatePayload {
   name: string;
   phone: string;
   password: string;

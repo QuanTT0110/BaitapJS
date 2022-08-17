@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { check, validationResult, buildCheckFunction } from "express-validator";
+import { validationResult, buildCheckFunction } from "express-validator";
 import responseMsg from "../../const/response-msg";
 import AppError from "../../utils/app-error";
-
+import response from "../../utils/response";
 const checkUUIDParamsAndRequest = buildCheckFunction([
   "body",
   "query",
@@ -22,8 +22,7 @@ const createStaff = async (req: Request, res: Response, next: NextFunction) => {
 
   const rs = validationResult(req);
   if (!rs.isEmpty()) {
-    const error = new AppError(403, responseMsg.INVALID_INPUT);
-    return next(error);
+    return response.r400(res, responseMsg.INVALID_INPUT);
   }
   if (typeof req.body.active == "string") {
     req.body.active = req.body.active == "true";
@@ -36,8 +35,7 @@ const isUUID = async (req: Request, res: Response, next: NextFunction) => {
   await checkUUIDParamsAndRequest("id").isUUID().run(req);
   const rs = validationResult(req);
   if (!rs.isEmpty()) {
-    const error = new AppError(403, responseMsg.INVALID_INPUT);
-    return next(error);
+    return response.r400(res, responseMsg.INVALID_INPUT);
   }
   next();
 };
@@ -55,8 +53,7 @@ const queryStaff = async (req: Request, res: Response, next: NextFunction) => {
   await checkQuery("active").isBoolean().optional({ nullable: true }).run(req);
   const rs = await validationResult(req);
   if (!rs.isEmpty()) {
-    const error = new AppError(403, responseMsg.INVALID_INPUT);
-    return next(error);
+    return response.r400(res, responseMsg.INVALID_INPUT);
   }
   if (typeof req.body.active == "string") {
     req.body.active = req.body.active == "true";

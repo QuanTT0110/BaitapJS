@@ -7,16 +7,16 @@ import config from "../configs/config";
 import responseMsg from "../const/response-msg";
 
 const login = async (login: ILogin): Promise<[Object | null, Error | null]> => {
-  const user = await dao.staff.findByPhone(login.phone);
-  if (user instanceof Error) {
-    return [null, user];
+  const [user, error] = await dao.staff.findByPhone(login.phone);
+  if (error) {
+    return [null, error];
   }
-  if (!user.isRoot) {
+  if (user && !user.isRoot) {
     if (!user.active) {
       return [null, new Error(responseMsg.ACCOUNT_IS_DISABLE)];
     }
   }
-  if (await bcrypt.compare(login.password, user.password)) {
+  if (user && (await bcrypt.compare(login.password, user.password))) {
     const accessToken = jwt.sign(
       { ...user, password: null },
       config.jwtSecret,

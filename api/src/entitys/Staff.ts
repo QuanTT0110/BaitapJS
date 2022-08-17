@@ -2,7 +2,7 @@ import { Entity, Column, BeforeInsert, BeforeUpdate } from "typeorm";
 import BaseModel from "./base";
 import * as bcrypt from "bcryptjs";
 
-@Entity("Staff")
+@Entity("staffs")
 export default class Staff extends BaseModel {
   @Column()
   name: string;
