@@ -47,9 +47,8 @@ export default class Staff {
   static getStaffs = async (query: IQueryStaff): Promise<Staff[]> => {
     const limit = query.limit ? Math.floor(query.limit) : 10;
     const keyword = query.keyword ? "%" + query.keyword + "%" : "%%";
-    const page = query.page > 0 ? Math.floor(query.page - 1) * limit : 0;
+    const page = query.page > 0 ? Math.floor(query.page - 1) * limit : 1;
     const queryString = staffReponsitory.createQueryBuilder();
-    queryString;
     queryString
       .where("Staff.name LIKE :name", { name: `%${keyword}%` })
       .orWhere("Staff.email LIKE :email", { email: `%${keyword}%` });
