@@ -5,6 +5,7 @@ const staffReponsitory = AppDataSource.getRepository(Staff);
 
 export const getStaffByEmail = async (email: string): Promise<Staff | null> => {
   const result = await staffReponsitory.findOne({
+    
     where: {
       email: email,
     },
@@ -26,6 +27,7 @@ export const getStaff = async (id: number): Promise<Staff | null> => {
       id: id,
     },
   });
+  
   return result;
 };
 
