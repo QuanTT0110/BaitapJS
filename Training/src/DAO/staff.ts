@@ -5,7 +5,6 @@ const staffReponsitory = AppDataSource.getRepository(Staff);
 
 export const getStaffByEmail = async (email: string): Promise<Staff | null> => {
   const result = await staffReponsitory.findOne({
-    
     where: {
       email: email,
     },
@@ -23,13 +22,11 @@ export const getStaffByEmail = async (email: string): Promise<Staff | null> => {
 
 export const getStaff = async (id: number): Promise<Staff | null> => {
   const result = await staffReponsitory.findOne({
-    
     where: {
       id: id,
     },
-    
   });
-  
+
   return result;
 };
 
@@ -44,7 +41,6 @@ export const saveStaff = async (
   id: number
 ): Promise<Staff | null> => {
   const oldStaff = await getStaff(id);
-
   if (!oldStaff) {
     return null;
   }
