@@ -1,12 +1,11 @@
 import services from "../services";
 import { Request, Response } from "express";
 import response from "../utils/response";
-import { ICreateStaff } from "../models/create-request";
-import { IQueryStaff } from "../models/query-request";
+import { IStaffCreatePayload, IStaffFindAllQuery } from "../models/staff";
 import responseMsg from "../const/response-msg";
 
 const create = async (req: Request, res: Response) => {
-  const staff: ICreateStaff = req.body as ICreateStaff;
+  const staff: IStaffCreatePayload = req.body as IStaffCreatePayload;
   const [data, error] = await services.staff.create(staff);
   if (error) {
     if (error.message == responseMsg.ALREADY_EXIST) {
@@ -18,7 +17,7 @@ const create = async (req: Request, res: Response) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  const staff: ICreateStaff = req.body as ICreateStaff;
+  const staff: IStaffCreatePayload = req.body as IStaffCreatePayload;
   const [data, error] = await services.staff.update(req.params.id, staff);
   if (error) {
     if (error.message == responseMsg.ALREADY_EXIST) {
@@ -46,7 +45,7 @@ const findById = async (req: Request, res: Response) => {
 };
 
 const find = async (req: Request, res: Response) => {
-  const query: IQueryStaff = req.query as never;
+  const query: IStaffFindAllQuery = req.query as never;
   const [data, error] = await services.staff.find(query);
   return response.r200(res, data);
 };

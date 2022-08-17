@@ -1,10 +1,10 @@
-import { ILogin } from "../models/common-request";
+import { ICommonLoginPayload } from "../models/common";
 import services from "../services";
 import { Request, Response } from "express";
 import response from "../utils/response";
 
 const login = async (req: Request, res: Response) => {
-  const queryLogin: ILogin = req.body as ILogin;
+  const queryLogin: ICommonLoginPayload = req.body as ICommonLoginPayload;
 
   const [data, error] = await services.common.login(queryLogin);
   if (error) {
