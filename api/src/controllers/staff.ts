@@ -8,10 +8,7 @@ const create = async (req: Request, res: Response) => {
   const staff: IStaffCreatePayload = req.body as IStaffCreatePayload;
   const [data, error] = await services.staff.create(staff);
   if (error) {
-    if (error.message == responseMsg.ALREADY_EXIST) {
-      return response.r400(res, error.message);
-    }
-    return response.r404(res);
+    return response.r400(res, error.message);
   }
   return response.r200(res, data);
 };
