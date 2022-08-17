@@ -23,9 +23,11 @@ export const getStaffByEmail = async (email: string): Promise<Staff | null> => {
 
 export const getStaff = async (id: number): Promise<Staff | null> => {
   const result = await staffReponsitory.findOne({
+    
     where: {
       id: id,
     },
+    
   });
   
   return result;
