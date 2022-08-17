@@ -11,7 +11,7 @@ import { loginStaffWithEmailAndPassword } from "../services"
         if(staff === false){
            return  res.status(404).json({msg:"Incorrect Email or Password "});
         }
-       return  res.status(200).send({msg:"Login successfully ", data: staff,access_token: token});
-    }
-}
+      
+       return  res.status(200).send({msg:"Login successfully ", data: staff,access_token: token})
+   }
   
