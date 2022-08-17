@@ -1,8 +1,21 @@
 import "reflect-metadata"
 import app from "./app"
-import { AppDataSource } from "./config/config";
-import dotenv from 'dotenv';
-dotenv.config()
+import { DataSource } from "typeorm"
+import  {Staff}  from "../src/entity"
+
+export const AppDataSource = new DataSource({
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    username: "postgres",
+    password: "hungpro10a3",
+    database: "training",
+    synchronize: true,
+    logging: true,
+    entities: [Staff],
+    subscribers: [],
+    migrations: [],
+})
 
 async function main() {
     try {
