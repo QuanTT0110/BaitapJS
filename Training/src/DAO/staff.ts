@@ -25,6 +25,7 @@ export const getStaff = async (id: number): Promise<Staff | null> => {
     where: {
       id: id,
     },
+    
   });
 
   return result;
