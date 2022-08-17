@@ -18,6 +18,7 @@ const create = async (
 
   return [{ ...rs, password: undefined }, null];
 };
+
 const update = async (
   id: string,
   staff: ICreateStaff
@@ -41,6 +42,7 @@ const update = async (
 
   return [rs, null];
 };
+
 const changeActive = async (
   id: string
 ): Promise<[Object | null, Error | null]> => {
@@ -54,6 +56,7 @@ const changeActive = async (
   }
   return [{}, null];
 };
+
 const findById = async (id: string): Promise<[Staff | null, Error | null]> => {
   const rs = await dao.staff.findById(id);
   if (rs instanceof Error) {
@@ -61,12 +64,14 @@ const findById = async (id: string): Promise<[Staff | null, Error | null]> => {
   }
   return [rs, null];
 };
+
 const find = async (query: IQueryStaff): Promise<[Staff[], null]> => {
   query.limit = query.limit ? Math.floor(query.limit) : 20;
   query.keyword = query.keyword ? "%" + query.keyword + "%" : "%%";
   const rs = await dao.staff.find(query);
   return [rs, null];
 };
+
 const isPhoneExist = async (
   phone: string,
   id: string | null
@@ -84,6 +89,7 @@ const isPhoneExist = async (
   }
   return true;
 };
+
 const isExist = async (id: string): Promise<boolean> => {
   const rs = await dao.staff.findById(id);
   if (rs instanceof Error) {
@@ -91,6 +97,7 @@ const isExist = async (id: string): Promise<boolean> => {
   }
   return true;
 };
+
 export default {
   create,
   update,

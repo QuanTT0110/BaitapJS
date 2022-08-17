@@ -24,6 +24,7 @@ export default class DB {
   static getAppDataSource = (): DataSource => {
     return this._appDataSource;
   };
+
   static getStaffRepository = (): Repository<Staff> => {
     return this._appDataSource.getRepository(Staff);
   };

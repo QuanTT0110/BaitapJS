@@ -1,5 +1,6 @@
 import { Response } from "express";
 import responseMsg from "../const/response-msg";
+
 const r200 = (
   res: Response,
   data: any,

@@ -5,6 +5,7 @@ import * as jwt from "jsonwebtoken";
 import { Staff } from "../entitys";
 import services from "../services";
 import responseMsg from "../const/response-msg";
+
 export const auth = async (req: Request, res: Response, next: NextFunction) => {
   const token = <string>req.headers["authorization"]?.split("Bearer ")[1];
 

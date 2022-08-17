@@ -8,6 +8,7 @@ import router from "./routes";
 import bodyParser from "body-parser";
 import cors from "cors";
 import swaggerDocs from "./configs/swagger";
+
 async function main() {
   const app: Express = express();
 
@@ -33,4 +34,5 @@ async function main() {
     console.log("server listening on port " + PORT);
   });
 }
+
 main();

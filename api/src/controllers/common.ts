@@ -2,6 +2,7 @@ import { ILogin } from "../models/common-request";
 import services from "../services";
 import { Request, Response } from "express";
 import response from "../utils/response";
+
 const login = async (req: Request, res: Response) => {
   const queryLogin: ILogin = req.body as ILogin;
 

@@ -17,6 +17,7 @@ const findByPhone = async (phone: string): Promise<Staff | Error> => {
   }
   return rs;
 };
+
 const findById = async (id: string): Promise<Staff | Error> => {
   const rs = await db
     .getStaffRepository()
@@ -28,6 +29,7 @@ const findById = async (id: string): Promise<Staff | Error> => {
   }
   return rs;
 };
+
 const create = async (staff: ICreateStaff): Promise<Staff | Error> => {
   const newStaff = await db
     .getStaffRepository()
@@ -37,6 +39,7 @@ const create = async (staff: ICreateStaff): Promise<Staff | Error> => {
   }
   return newStaff;
 };
+
 const update = async (staff: Staff): Promise<Staff | Error> => {
   const updateStaff = await db.getStaffRepository().save(staff);
   if (!updateStaff) {
@@ -44,6 +47,7 @@ const update = async (staff: Staff): Promise<Staff | Error> => {
   }
   return updateStaff;
 };
+
 const changeActive = async (
   id: string,
   active: boolean
@@ -56,6 +60,7 @@ const changeActive = async (
   }
   return {};
 };
+
 const find = async (query: IQueryStaff): Promise<Staff[]> => {
   const skip = query.page > 0 ? Math.floor(query.page - 1) * query.limit : 0;
   const queryString = await db.getStaffRepository().createQueryBuilder();
@@ -77,4 +82,5 @@ const find = async (query: IQueryStaff): Promise<Staff[]> => {
   }
   return await queryString.limit(query.limit).offset(skip).getMany();
 };
+
 export default { findByPhone, findById, create, update, changeActive, find };

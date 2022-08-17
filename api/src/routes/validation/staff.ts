@@ -2,13 +2,17 @@ import { Request, Response, NextFunction } from "express";
 import { check, validationResult, buildCheckFunction } from "express-validator";
 import responseMsg from "../../const/response-msg";
 import AppError from "../../utils/app-error";
+
 const checkUUIDParamsAndRequest = buildCheckFunction([
   "body",
   "query",
   "params",
 ]);
+
 const checkQuery = buildCheckFunction(["query"]);
+
 const checkBody = buildCheckFunction(["body"]);
+
 const createStaff = async (req: Request, res: Response, next: NextFunction) => {
   await checkBody(["name", "phone", "password", "active", "isRoot"])
     .notEmpty()
@@ -37,6 +41,7 @@ const isUUID = async (req: Request, res: Response, next: NextFunction) => {
   }
   next();
 };
+
 const queryStaff = async (req: Request, res: Response, next: NextFunction) => {
   await checkQuery(["limit", "page"])
     .isNumeric()

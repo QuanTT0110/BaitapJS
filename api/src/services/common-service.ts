@@ -28,4 +28,5 @@ const login = async (login: ILogin): Promise<[Object | null, Error | null]> => {
   }
   return [null, new Error(responseMsg.WRONG_PASSWORD)];
 };
+
 export default { login };
