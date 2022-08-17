@@ -1,17 +1,23 @@
 import {  Request, Response } from "express"; 
 import { accessToken } from "../middleware/auth";
-import { loginStaffWithEmailAndPassword } from "../services"
+import { services } from "../services"
 
   
  export default class Auth {
     static login = async (req: Request, res: Response) => {
-        const token =   await accessToken(req);
-        const { email, password } = req.body;
-        const staff = await loginStaffWithEmailAndPassword(email, password)      
+        const token =  <String|null> (
+         await accessToken(req)
+        )
+        const { email } = req.body;
+        const staff = <Object|null> (
+         await services.loginStaffWithEmailAndPassword(email)  
+        ) 
+
         if(staff === false){
            return  res.status(404).json({msg:"Incorrect Email or Password "});
         }
-      
-       return  res.status(200).send({msg:"Login successfully ", data: staff,access_token: token})
-   }
+        
+       return  res.status(200).send({msg:"Login successfully ", data: staff, access_token: token});
+    }
+}
   
