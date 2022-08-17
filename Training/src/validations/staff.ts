@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validationResult, buildCheckFunction } from "express-validator";
 const checkQuery = buildCheckFunction(["query"]);
 const checkBody = buildCheckFunction(["body"]);
+
 export const createStaff = async (
   req: Request,
   res: Response,
@@ -14,8 +15,10 @@ export const createStaff = async (
   if (!rs.isEmpty()) {
     return res.status(403).json({ msg: "Invalid Input" });
   }
+  
   next();
 };
+
 export const updateStaff = async (
   req: Request,
   res: Response,
@@ -28,6 +31,7 @@ export const updateStaff = async (
   if (!rs.isEmpty()) {
     return res.status(403).json({ msg: "Invalid Input" });
   }
+  
   next();
 };
 
@@ -45,5 +49,6 @@ export const queryStaff = async (
   if (!rs.isEmpty()) {
     return res.status(403).json({ msg: "Invalid Input" });
   }
+  
   next();
 };
