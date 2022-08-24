@@ -6,16 +6,15 @@ import (
 	"department/src/service"
 	"fmt"
 	"github.com/labstack/echo/v4"
-	"strconv"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func CreateStaff(c echo.Context) error {
-	var staff = new(model.StaffPayload)
-
-	if err := staff.BindAndValidatePayload(c); err != nil {
+	var payload, ok = c.Get("payload").(model.StaffPayload)
+	if !ok {
 		return c.JSON(400, constant.BAD_REQUEST)
 	}
-	var _, err = service.CreateStaff(*staff)
+	var _, err = service.CreateStaff(payload)
 	if err != nil {
 		return c.JSON(400, constant.ALREADY_EXIST)
 	}
@@ -24,30 +23,37 @@ func CreateStaff(c echo.Context) error {
 }
 
 func UpdateStaff(c echo.Context) error {
-	var staff = new(model.StaffPayload)
-	var paramId = new(model.MongoID)
-	if err := staff.BindAndValidatePayload(c); err != nil {
+	var payload, ok = c.Get("payload").(model.StaffPayload)
+	var ID, _ = primitive.ObjectIDFromHex(c.Param("id"))
+
+	if !ok {
 		return c.JSON(400, constant.BAD_REQUEST)
 	}
-	if err := paramId.BindAndValidateParamID(c); err != nil {
-		return c.JSON(400, constant.BAD_REQUEST)
-	}
-	var _, err = service.UpdateStaff(paramId.ID, *staff)
+	var _, err = service.UpdateStaff(ID, payload)
 	if err != nil {
 		if fmt.Sprint(err) == constant.ALREADY_EXIST {
 			return c.JSON(400, constant.ALREADY_EXIST)
 		}
 		return c.JSON(400, constant.UPDATE_ERROR)
 	}
-	
+	return c.JSON(200, constant.UPDATE_SUCCESS)
 }
 
 func GetStaffs(c echo.Context) error {
-	var query = model.StaffQuery{}
-	query.Limit, _ = strconv.ParseInt(c.QueryParam("limit"), 20, 64)
-	query.Page, _ = strconv.ParseInt(c.QueryParam("page"), 20, 64)
-	query.Keyword = c.QueryParam("keyword")
-	var rs, err = service.GetStaffs(query)
+	var query, ok = c.Get("query").(model.StaffQuery)
+	if !ok {
+		return c.JSON(400, constant.BAD_REQUEST)
+	}
+	var rs, err = service.GetStaffs(&query)
+	if err != nil {
+		return c.JSON(400, constant.NOT_FOUND)
+	}
+	return c.JSON(200, rs)
+}
+
+func GetStaff(c echo.Context) error {
+	var ID, _ = primitive.ObjectIDFromHex(c.Param("id"))
+	var rs, err = service.GetStaff(ID)
 	if err != nil {
 		return c.JSON(400, constant.NOT_FOUND)
 	}

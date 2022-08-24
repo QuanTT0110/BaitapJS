@@ -7,5 +7,5 @@ import (
 
 type Car struct {
 	name string
-	age  string
+	age  int64
 }
