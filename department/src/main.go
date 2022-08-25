@@ -3,8 +3,11 @@ package main
 import (
 	"department/src/config"
 	"department/src/route"
-	_ "github.com/labstack/echo/v4"
 	_ "net/http"
+
+	"github.com/labstack/echo/v4"
+	_ "github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
@@ -15,7 +18,6 @@ func main() {
 	e.Use(middleware.CORS())
 
 	config.ConnectMongoDb()
-
 	route.New(e)
 	e.Logger.Fatal(e.Start(":" + config.ProcessEnv.PortApp))
 }

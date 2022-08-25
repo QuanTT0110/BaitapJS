@@ -46,6 +46,7 @@ func GetDepartment(c echo.Context) error {
 	}
 	return c.JSON(200, rs)
 }
+
 func GetDepartments(c echo.Context) error {
 	var query, ok = c.Get("query").(model.DepartmentQuery)
 	if !ok {
