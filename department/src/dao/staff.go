@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"department/src/model"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -47,7 +48,7 @@ func GetStaffs(query model.StaffQuery) ([]model.Staff, error) {
 }
 
 func GetStaff(id primitive.ObjectID) (model.Staff, error) {
-	var staff = model.Staff{}
+	var staff model.Staff
 	var err = staffCollection.FindOne(ctx, bson.D{{"_id", id}}).Decode(&staff)
 	if err != nil {
 		return staff, err
@@ -56,8 +57,10 @@ func GetStaff(id primitive.ObjectID) (model.Staff, error) {
 }
 
 func GetStaffByEmail(email string) (model.Staff, error) {
-	var staff = model.Staff{}
+	var staff model.Staff
+	fmt.Println("dao............")
 	var err = staffCollection.FindOne(ctx, bson.D{{"email", email}}).Decode(&staff)
+	fmt.Println("pass dao ............", err)
 	if err != nil {
 		return staff, err
 	}

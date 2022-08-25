@@ -22,7 +22,7 @@ func ConnectMongoDb() {
 		return
 	}
 	mongoDb = client.Database(ProcessEnv.Database.Name)
-	dao.SetDepartmentCollection(GetCollection("staffs"))
+	dao.SetStaffCollection(GetCollection("staffs"))
 	dao.SetDepartmentCollection(GetCollection("departments"))
 	fmt.Println("Connect successfully")
 }

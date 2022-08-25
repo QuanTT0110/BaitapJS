@@ -11,6 +11,7 @@ import (
 
 func CreateStaff(c echo.Context) error {
 	var payload, ok = c.Get("payload").(model.StaffPayload)
+	fmt.Println("controler....", payload)
 	if !ok {
 		return c.JSON(400, constant.BAD_REQUEST)
 	}

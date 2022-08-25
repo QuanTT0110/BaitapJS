@@ -3,6 +3,7 @@ package validate
 import (
 	"department/src/constant"
 	"department/src/model"
+	"fmt"
 
 	"github.com/labstack/echo/v4"
 )
@@ -11,10 +12,11 @@ func StaffPayload(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload = new(model.StaffPayload)
 		var err = payload.BindAndValidatePayload(c)
+		fmt.Println("validate staff ... ", err)
 		if err != nil {
 			return c.JSON(400, constant.INVALID_INPUT)
 		}
-		c.Set("payload", payload)
+		c.Set("payload", *payload)
 		return next(c)
 	}
 }
@@ -24,9 +26,10 @@ func StaffQuery(next echo.HandlerFunc) echo.HandlerFunc {
 		var query = new(model.StaffQuery)
 		var err = query.BindAndValidateQuery(c)
 		if err != nil {
+			fmt.Println(err)
 			return c.JSON(400, constant.INVALID_INPUT)
 		}
-		c.Set("query", query)
+		c.Set("query", *query)
 		return next(c)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"department/src/dao"
 	"department/src/model"
 	"errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
 )
@@ -38,7 +39,8 @@ func UpdateDepartment(id primitive.ObjectID, payload model.DepartmentPayload) (i
 
 func GetDepartment(id primitive.ObjectID) (interface{}, error) {
 	var rs, err = dao.GetDepartmentById(id)
-	if err != nil || reflect.DeepEqual(rs, model.Department{}) {
+	fmt.Println("services ...", err)
+	if err != nil {
 		return nil, errors.New(constant.NOT_FOUND)
 	}
 	return rs, nil

@@ -7,5 +7,5 @@ import (
 func New(e *echo.Echo) {
 
 	NewStaffRouter(e)
-
+	NewDepartmentRouter(e)
 }

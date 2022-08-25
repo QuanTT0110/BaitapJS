@@ -29,7 +29,7 @@ func UpdateDepartment(id primitive.ObjectID, payload model.DepartmentPayload) (i
 	var opt = options.FindOneAndUpdate().SetReturnDocument(options.After)
 	var update = bson.D{{"$set", payload}}
 	var result model.Department
-	var err = departmentCol.FindOneAndUpdate(ctx, filter, update, opt).Decode(result)
+	var err = departmentCol.FindOneAndUpdate(ctx, filter, update, opt).Decode(&result)
 	if err != nil {
 		return result, err
 	}
@@ -39,7 +39,7 @@ func UpdateDepartment(id primitive.ObjectID, payload model.DepartmentPayload) (i
 func GetDepartmentById(id primitive.ObjectID) (model.Department, error) {
 	var department model.Department
 	var filter = bson.D{{"_id", id}}
-	var err = departmentCol.FindOne(ctx, filter).Decode(department)
+	var err = departmentCol.FindOne(ctx, filter).Decode(&department)
 	if err != nil {
 		return department, err
 	}
@@ -49,7 +49,7 @@ func GetDepartmentById(id primitive.ObjectID) (model.Department, error) {
 func GetDepartmentByName(name string) (model.Department, error) {
 	var department model.Department
 	var filter = bson.D{{"name", name}}
-	var err = departmentCol.FindOne(ctx, filter).Decode(department)
+	var err = departmentCol.FindOne(ctx, filter).Decode(&department)
 	if err != nil {
 		return department, err
 	}

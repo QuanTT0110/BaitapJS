@@ -41,6 +41,7 @@ func UpdateDepartment(c echo.Context) error {
 func GetDepartment(c echo.Context) error {
 	var ID, _ = primitive.ObjectIDFromHex(c.Param("id"))
 	var rs, err = service.GetDepartment(ID)
+	fmt.Println("controller...", err)
 	if err != nil {
 		return c.JSON(400, constant.NOT_FOUND)
 	}
