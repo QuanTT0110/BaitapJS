@@ -5,14 +5,26 @@ import (
 	"department/src/model"
 	"fmt"
 
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
 	"github.com/labstack/echo/v4"
 )
 
 func StaffPayload(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		var payload = new(model.StaffPayload)
-		var err = payload.BindAndValidatePayload(c)
-		fmt.Println("validate staff ... ", err)
+		if err := c.Bind(payload); err != nil {
+			fmt.Println(err, payload)
+
+			return c.JSON(400, constant.INVALID_INPUT)
+		}
+		var err = validation.ValidateStruct(payload,
+			validation.Field(&payload.Name, validation.Required),
+			validation.Field(&payload.Email, validation.Required, is.Email),
+			validation.Field(&payload.Salary, validation.Required),
+			validation.Field(&payload.Active, validation.Required),
+			validation.Field(&payload.Password, validation.Required),
+		)
 		if err != nil {
 			return c.JSON(400, constant.INVALID_INPUT)
 		}
@@ -23,10 +35,17 @@ func StaffPayload(next echo.HandlerFunc) echo.HandlerFunc {
 
 func StaffQuery(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
+
 		var query = new(model.StaffQuery)
-		var err = query.BindAndValidateQuery(c)
+		if err := c.Bind(query); err != nil {
+			return c.JSON(400, constant.INVALID_INPUT)
+		}
+		var err = validation.ValidateStruct(query,
+			validation.Field(&query.Limit, validation.Required),
+			validation.Field(&query.Page, validation.Required),
+			validation.Field(&query.Department, validation.Each(is.MongoID)),
+		)
 		if err != nil {
-			fmt.Println(err)
 			return c.JSON(400, constant.INVALID_INPUT)
 		}
 		c.Set("query", *query)

@@ -3,12 +3,12 @@ package dao
 import (
 	"context"
 	"department/src/model"
-	"fmt"
+	"log"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
 )
 
 var staffCollection *mongo.Collection
@@ -58,9 +58,7 @@ func GetStaff(id primitive.ObjectID) (model.Staff, error) {
 
 func GetStaffByEmail(email string) (model.Staff, error) {
 	var staff model.Staff
-	fmt.Println("dao............")
 	var err = staffCollection.FindOne(ctx, bson.D{{"email", email}}).Decode(&staff)
-	fmt.Println("pass dao ............", err)
 	if err != nil {
 		return staff, err
 	}
@@ -77,7 +75,7 @@ func CreateStaff(staff model.StaffPayload) (interface{}, error) {
 
 func UpdateStaff(id primitive.ObjectID, staff model.StaffPayload) (model.Staff, error) {
 	var result model.Staff
-	var filter = bson.D{{"id", id}}
+	var filter = bson.D{{"_id", id}}
 	var update = bson.D{{"$set", staff}}
 	var opts = options.FindOneAndUpdate().SetReturnDocument(options.After)
 	var err = staffCollection.FindOneAndUpdate(ctx, filter, update, opts).Decode(&result)

@@ -5,48 +5,50 @@ import (
 	"department/src/dao"
 	"department/src/model"
 	"errors"
-	"fmt"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateDepartemnt(payload model.DepartmentPayload) (interface{}, error) {
+func CreateDepartemnt(payload model.DepartmentPayload) (model.Message, error) {
 	if isExistNameDepartment(payload.Name) {
-		return nil, errors.New(constant.ALREADY_EXIST)
+		return model.Message{}, errors.New(constant.ALREADY_EXIST)
 	}
-	var rs, err = dao.CreateDepartment(payload)
+	var _, err = dao.CreateDepartment(payload)
 	if err != nil {
-		return nil, err
+		return model.Message{}, err
 	}
-	return rs, nil
+	return model.Message{constant.CREATE_SUCCESS}, nil
 
 }
 
-func UpdateDepartment(id primitive.ObjectID, payload model.DepartmentPayload) (interface{}, error) {
+func UpdateDepartment(id primitive.ObjectID, payload model.DepartmentPayload) (model.Message, error) {
 	if isExistNameDepartment(payload.Name) {
-		return nil, errors.New(constant.ALREADY_EXIST)
+		return model.Message{}, errors.New(constant.ALREADY_EXIST)
 	}
 	if isExistDepartment(id) {
-		var rs, err = dao.UpdateDepartment(id, payload)
+		var _, err = dao.UpdateDepartment(id, payload)
 		if err != nil {
-			return nil, err
+			return model.Message{}, err
 		}
-		return rs, nil
+		return model.Message{constant.UPDATE_SUCCESS}, nil
 	}
-	return nil, errors.New(constant.NOT_FOUND)
+	return model.Message{}, errors.New(constant.NOT_FOUND)
 
 }
 
-func GetDepartment(id primitive.ObjectID) (interface{}, error) {
+func GetDepartment(id primitive.ObjectID) (model.DepartmentResponse, error) {
 	var rs, err = dao.GetDepartmentById(id)
-	fmt.Println("services ...", err)
 	if err != nil {
-		return nil, errors.New(constant.NOT_FOUND)
+		return model.DepartmentResponse{}, errors.New(constant.NOT_FOUND)
 	}
-	return rs, nil
+	return model.DepartmentResponse{
+		ID:   rs.ID.Hex(),
+		Name: rs.Name,
+	}, nil
 }
 
-func GetDepartments(query *model.DepartmentQuery) (interface{}, error) {
+func GetDepartments(query *model.DepartmentQuery) ([]model.DepartmentResponse, error) {
 	if query.Limit < 1 {
 		query.Limit = 20
 	}
@@ -57,7 +59,14 @@ func GetDepartments(query *model.DepartmentQuery) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	return rs, nil
+	var departments = []model.DepartmentResponse{}
+	for _, value := range rs {
+		departments = append(departments, model.DepartmentResponse{
+			ID:   value.ID.Hex(),
+			Name: value.Name,
+		})
+	}
+	return departments, nil
 }
 
 func isExistNameDepartment(name string) bool {

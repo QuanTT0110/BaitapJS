@@ -5,66 +5,96 @@ import (
 	"department/src/dao"
 	"department/src/model"
 	"errors"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"reflect"
+
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func CreateStaff(payload model.StaffPayload) (interface{}, error) {
+func CreateStaff(payload model.StaffPayload) (model.Message, error) {
 	if isExistEmailStaff(payload.Email) {
-		return nil, errors.New(constant.ALREADY_EXIST)
+		return model.Message{}, errors.New(constant.ALREADY_EXIST)
 	}
-	var rs, err = dao.CreateStaff(payload)
+	var _, err = dao.CreateStaff(payload)
 	if err != nil {
-		return nil, err
+		return model.Message{}, err
 	}
-	return rs, nil
+	return model.Message{constant.CREATE_SUCCESS}, nil
 }
 
-func UpdateStaff(id primitive.ObjectID, payload model.StaffPayload) (interface{}, error) {
+func UpdateStaff(id primitive.ObjectID, payload model.StaffPayload) (model.Message, error) {
 	if isExistEmailStaff(payload.Email) {
-		return nil, errors.New(constant.ALREADY_EXIST)
+		return model.Message{}, errors.New(constant.ALREADY_EXIST)
 	}
 	if isExistStaff(id) {
-		var rs, err = dao.UpdateStaff(id, payload)
+		var _, err = dao.UpdateStaff(id, payload)
 		if err != nil {
-			return nil, err
+			return model.Message{}, err
 		}
-		return rs, nil
+		return model.Message{constant.UPDATE_SUCCESS}, nil
 	}
-	return nil, errors.New(constant.NOT_FOUND)
+	return model.Message{}, errors.New(constant.NOT_FOUND)
 }
 
-func ChangeActiveStaff(payload model.StaffStatusPayload) (interface{}, error) {
-	var rs, err = dao.ChangeStaffActive(payload)
+func ChangeActiveStaff(payload model.StaffStatusPayload) (model.Message, error) {
+	var _, err = dao.ChangeStaffActive(payload)
 	if err != nil {
-		return nil, err
+		return model.Message{}, err
 	}
-	return rs, nil
+	return model.Message{constant.UPDATE_SUCCESS}, nil
 }
 
-func GetStaff(id primitive.ObjectID) (interface{}, error) {
+func GetStaff(id primitive.ObjectID) (model.StaffResponse, error) {
+
 	var rs, err = dao.GetStaff(id)
+
 	if err != nil {
-		return nil, err
+		return model.StaffResponse{}, err
 	}
+
 	if reflect.DeepEqual(rs, model.Staff{}) {
-		return nil, errors.New(constant.NOT_FOUND)
+		return model.StaffResponse{}, errors.New(constant.NOT_FOUND)
 	}
-	return rs, nil
+
+	var department, _ = GetDepartment(rs.Department)
+
+	return model.StaffResponse{
+		ID:         rs.ID.Hex(),
+		Name:       rs.Name,
+		Email:      rs.Email,
+		Active:     rs.Active,
+		Salary:     rs.Salary,
+		Department: department,
+	}, nil
 }
 
-func GetStaffs(query *model.StaffQuery) (interface{}, error) {
+func GetStaffs(query *model.StaffQuery) ([]model.StaffResponse, error) {
+
 	if query.Limit < 1 {
 		query.Limit = 20
 	}
 	if query.Page < 1 {
 		query.Page = 1
 	}
+
 	var rs, err = dao.GetStaffs(*query)
 	if err != nil {
 		return nil, err
 	}
-	return rs, nil
+
+	var staffs = []model.StaffResponse{}
+	for _, value := range rs {
+		var department, _ = GetDepartment(value.Department)
+
+		staffs = append(staffs, model.StaffResponse{
+			ID:         value.ID.Hex(),
+			Name:       value.Name,
+			Email:      value.Email,
+			Active:     value.Active,
+			Salary:     value.Salary,
+			Department: department,
+		})
+	}
+	return staffs, nil
 }
 
 func isExistStaff(id primitive.ObjectID) bool {

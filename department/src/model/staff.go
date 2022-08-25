@@ -1,11 +1,7 @@
 package model
 
 import (
-	"fmt"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-	"github.com/go-ozzo/ozzo-validation/v4/is"
 	_ "github.com/go-ozzo/ozzo-validation/v4/is"
-	"github.com/labstack/echo/v4"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -20,13 +16,22 @@ type (
 	}
 
 	Staff struct {
-		ID         primitive.ObjectID `bson:"_id" param:"id"`
-		Name       string             `bson:"name" json:"name" form:"name" `
-		Email      string             `bson:"email" json:"email" form:"email"`
-		Password   string             `bson:"password" json:"password" form:"password"`
-		Active     bool               `bson:"active" json:"active"  form:"active" `
-		Salary     float64            `bson:"salary" json:"salary" form:"salary"`
-		Department Department         `bson:"departments" `
+		ID         primitive.ObjectID `bson:"_id"`
+		Name       string             `bson:"name"`
+		Email      string             `bson:"email"`
+		Password   string             `bson:"password"`
+		Active     bool               `bson:"active"`
+		Salary     float64            `bson:"salary"`
+		Department primitive.ObjectID `bson:"departmentId" `
+	}
+
+	StaffResponse struct {
+		ID         string             `json:"_id"`
+		Name       string             `json:"name"`
+		Email      string             `json:"email"`
+		Active     bool               `json:"active"`
+		Salary     float64            `json:"salary"`
+		Department DepartmentResponse `json:"department" `
 	}
 
 	StaffQuery struct {
@@ -41,39 +46,3 @@ type (
 		Active bool               `bson:"active" form:"active" json:"active"`
 	}
 )
-
-func (s *StaffStatusPayload) BindAndValidateStatusPayload(c echo.Context) error {
-	if err := c.Bind(s); err != nil {
-		return err
-	}
-	return validation.ValidateStruct(s,
-		validation.Field(&s.ID, validation.Required, is.MongoID),
-		validation.Field(&s.ID, validation.Required),
-	)
-}
-
-func (s *StaffPayload) BindAndValidatePayload(c echo.Context) error {
-	if err := c.Bind(s); err != nil {
-		return err
-	}
-	return validation.ValidateStruct(s,
-		validation.Field(&s.Name, validation.Required),
-		validation.Field(&s.Email, validation.Required, is.Email),
-		validation.Field(&s.Salary, validation.Required),
-		validation.Field(&s.Active, validation.Required),
-		validation.Field(&s.Password, validation.Required),
-	)
-}
-
-func (s *StaffQuery) BindAndValidateQuery(c echo.Context) error {
-
-	if err := c.Bind(s); err != nil {
-		return err
-	}
-	fmt.Println("pass basic")
-	return validation.ValidateStruct(s,
-		validation.Field(&s.Limit, validation.Required),
-		validation.Field(&s.Page, validation.Required),
-		validation.Field(&s.Department, validation.Each(is.MongoID)),
-	)
-}
